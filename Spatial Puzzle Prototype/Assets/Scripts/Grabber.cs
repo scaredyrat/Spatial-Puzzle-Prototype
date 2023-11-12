@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshCollider))]
 public class Grabber : MonoBehaviour
 {
     private GameObject selectedObject;
@@ -12,24 +11,28 @@ public class Grabber : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            if(selectedObject == null)
+            // On left-click, cast ray
+            RaycastHit hit = CastRay();
+
+            // If object has a collider, execute
+            if(hit.collider != null)
             {
-                RaycastHit hit = CastRay();
-
-                if(hit.collider != null)
+                // If object is not moveable, cancel
+                if(!hit.collider.CompareTag("Moveable"))
                 {
-                    if(!hit.collider.CompareTag("drag"))
-                    {
-                        return;
-                    }
-
-                    selectedObject = hit.collider.gameObject;
+                    return;
                 }
-            }
 
+                // New selected object
+                selectedObject = hit.collider.gameObject;
+                Debug.Log("selected");
+            }
+            
+            // If ray does not hit collider, remove selection
             else
             {
-
+                selectedObject = null;
+                Debug.Log("deselected");
             }
         }
 
@@ -78,7 +81,6 @@ public class Grabber : MonoBehaviour
 
         RaycastHit hit;
         Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit);
-        Debug.Log(Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit));
         return hit;
     }
 }
