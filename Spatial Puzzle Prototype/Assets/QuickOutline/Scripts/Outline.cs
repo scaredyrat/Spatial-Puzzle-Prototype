@@ -57,7 +57,7 @@ public class Outline : MonoBehaviour {
   private Mode outlineMode;
 
   [SerializeField]
-  private Color outlineColor = Color.white;
+  public Color outlineColor = Color.white;
 
   [SerializeField, Range(0f, 10f)]
   private float outlineWidth = 2f;
@@ -306,4 +306,55 @@ public class Outline : MonoBehaviour {
         break;
     }
   }
+
+    //lucas modifications
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Moveable")
+        {
+            Debug.Log("Detected!");
+            outlineColor = new Color(185, 0, 0);
+            outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+
+            outlineWidth = 15f;
+            outlineFillMaterial.SetFloat("_OutlineWidth", outlineWidth);
+        }
+    }*/
+
+    private void OnCollisionStay(Collision collision)
+    {
+        ContactPoint[] contactPoints = collision.contacts;
+        Vector3 center = GetComponent<Collider>().bounds.center;
+
+        ContactPoint contactPoint = contactPoints[0];
+
+        Vector3 normal = contactPoint.normal;
+
+        RaycastHit hitInfo;
+        if (Physics.Raycast(center, -normal, out hitInfo))
+        {
+            float penetrationDepth = hitInfo.distance;
+            print("Depth: " + penetrationDepth);
+            if (penetrationDepth >= 1)
+            {
+                outlineColor = new Color(185, 0, 0);
+                outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+
+                outlineWidth = 15f;
+                outlineFillMaterial.SetFloat("_OutlineWidth", outlineWidth);
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Moveable")
+        {
+            outlineColor = new Color(255, 0, 255);
+            outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+
+            outlineWidth = 2f;
+            outlineFillMaterial.SetFloat("_OutlineWidth", outlineWidth);
+        }
+    }
 }

@@ -32,6 +32,7 @@ public class OutlineSelection : MonoBehaviour
         // Highlight
         if (highlight != null)
         {
+            StartCoroutine("DisableWait");
             highlight.gameObject.GetComponent<Outline>().enabled = false;
             highlight = null;
         }
@@ -66,6 +67,7 @@ public class OutlineSelection : MonoBehaviour
             {
                 if (selection != null)
                 {
+                    StartCoroutine("DisableWait");
                     selection.gameObject.GetComponent<Outline>().enabled = false;
                 }
                 selection = raycastHit.transform;
@@ -76,11 +78,17 @@ public class OutlineSelection : MonoBehaviour
             {
                 if (selection)
                 {
+                    StartCoroutine("DisableWait");
                     selection.gameObject.GetComponent<Outline>().enabled = false;
                     selection = null;
                 }
             }
         }
+    }
+
+    IEnumerator DisableWait()
+    {
+        yield return new WaitForSeconds(3f);
     }
 
 }
