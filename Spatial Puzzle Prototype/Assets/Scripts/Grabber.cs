@@ -66,6 +66,20 @@ public class Grabber : MonoBehaviour
                 selectedObject.transform.position = temp;
             }
 
+            // Up/Down
+            else if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Vector3 temp = selectedObject.transform.position;
+                temp.y = selectedObject.transform.position.y + 1;
+                selectedObject.transform.position = temp;
+            }
+            else if(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+            {
+                Vector3 temp = selectedObject.transform.position;
+                temp.y = selectedObject.transform.position.y - 1;
+                selectedObject.transform.position = temp;
+            }
+
             // Rotate (CHANGE BUTTONS ACCORDING TO ROTATION WITH PUZZLE PIECES)
             // Along X
             if(Input.GetKeyDown(KeyCode.UpArrow))
